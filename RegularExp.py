@@ -19,5 +19,20 @@ emailRegetex = re.compile(r'''(
     )''', re.VERBOSE)
 
     #TODO クリップボードのテキストを検索する
-    
+text = str(pyperclip.paste())
+matches = [] #検索結果を記録
+for groups in phoneRegex.findall(text):
+    phoneNum = '-'.join([groups[1], groups[3], groups[5]])
+    if groups[8] != '':
+        phoneNum += ' x' + groups[8]
+    matches.append(phoneNum)
+for groups in emailRegetex.findall(text):
+    matches.append(groups[0])
+
     #TODO 検索結果をクリップボードに貼り付け
+if len(matches) > 0:
+    pyperclip.copy('\n'.join(matches))
+    print('クリップボードにコピーしました:')
+    print('\n'.join(matches))
+else:
+    print('電話番号やメールアドレスは見つかりませんでした。')
